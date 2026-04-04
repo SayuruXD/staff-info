@@ -145,7 +145,7 @@ document.getElementById("staffForm").addEventListener("submit", function(e) {
   btn.innerText = "Sending...";
   btn.disabled = true;
 
-  fetch("YOUR_GOOGLE_SCRIPT_WEB_APP_URL", {
+  fetch("https://script.google.com/macros/s/AKfycbzpFLDD0MntfM9F5sRiN1eddcZKviw1JYOhpdGZn1wvRhIk1MwVHw3W3hpLcPoxWF8t/exec", {
     method: "POST",
     body: JSON.stringify({
       ign: document.getElementById("ign").value,
