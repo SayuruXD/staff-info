@@ -117,12 +117,14 @@ let submitted = false;
 function nextStep() {
   const step = document.getElementById("step" + currentStep);
   const inputs = step.querySelectorAll("input, select");
+
   for (let inp of inputs) {
     if (inp.required && inp.value.trim() === "") {
       alert("Please fill this field!");
       return;
     }
   }
+
   step.classList.add("hidden");
   currentStep++;
   document.getElementById("step" + currentStep).classList.remove("hidden");
@@ -143,11 +145,10 @@ document.getElementById("staffForm").addEventListener("submit", function(e) {
   btn.innerText = "Sending...";
   btn.disabled = true;
 
-  fetch("YOUR_EXEC_URL_HERE", {
+  fetch("YOUR_WEB_APP_URL_HERE", {  // <-- Replace with your deployed Web App URL
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       ign: document.getElementById("ign").value,
@@ -155,20 +156,17 @@ document.getElementById("staffForm").addEventListener("submit", function(e) {
       rank: document.getElementById("rank").value
     })
   })
-  .then(res => res.json())
+  .then(res => res.json())  // Parse JSON from Apps Script
   .then(data => {
     if (data.status === "success") {
       alert("Staff info submitted!");
       location.reload();
     } else {
-      alert("Error: " + (data.message || "Unknown error"));
-      btn.innerText = "Submit 🚀";
-      btn.disabled = false;
-      submitted = false;
+      throw new Error(data.message || "Unknown error");
     }
   })
   .catch(err => {
-    alert("Network or script error: " + err);
+    alert("Error submitting form: " + err.message);
     btn.innerText = "Submit 🚀";
     btn.disabled = false;
     submitted = false;
