@@ -69,7 +69,7 @@
     <div class="step" id="step1">
       <input type="text" id="ign" placeholder="Minecraft IGN" required>
       <input type="text" id="discord" placeholder="Discord Username (ex: Name#1234)" required>
-      <button type="button" class="nav-btn next-btn" onclick="nextStep()">Next ➜</button>
+      <button type="button" class="nav-btn next-btn">Next ➜</button>
     </div>
 
     <!-- STEP 2 -->
@@ -90,69 +90,79 @@
         <option value="Helper">💬 Helper</option>
         <option value="Trial Staff">🚧 Trial Staff</option>
       </select>
-      <button type="button" class="nav-btn back-btn" onclick="prevStep()">⬅ Back</button>
+      <button type="button" class="nav-btn back-btn">⬅ Back</button>
       <button type="submit" class="nav-btn submit-btn">Submit 🚀</button>
     </div>
   </form>
 </div>
 
 <script>
-let currentStep = 1;
-let submitted = false;
+document.addEventListener("DOMContentLoaded", function() {
+  let currentStep = 1;
+  let submitted = false;
 
-function nextStep() {
-  const step = document.getElementById("step" + currentStep);
-  const inputs = step.querySelectorAll("input, select");
-  for (let inp of inputs) {
-    if (inp.required && inp.value.trim() === "") {
-      alert("Please fill this field!");
+  const step1 = document.getElementById("step1");
+  const step2 = document.getElementById("step2");
+  const nextBtn = step1.querySelector(".next-btn");
+  const backBtn = step2.querySelector(".back-btn");
+  const form = document.getElementById("staffForm");
+  const submitBtn = step2.querySelector(".submit-btn");
+
+  function showStep(stepNum) {
+    if(stepNum === 1) { step1.classList.remove("hidden"); step2.classList.add("hidden"); }
+    if(stepNum === 2) { step1.classList.add("hidden"); step2.classList.remove("hidden"); }
+  }
+
+  nextBtn.addEventListener("click", function() {
+    // Validate step 1 inputs
+    const ign = document.getElementById("ign");
+    const discord = document.getElementById("discord");
+    if(!ign.value.trim() || !discord.value.trim()) {
+      alert("Please fill all fields!");
       return;
     }
-  }
-  step.classList.add("hidden");
-  currentStep++;
-  document.getElementById("step" + currentStep).classList.remove("hidden");
-}
+    currentStep = 2;
+    showStep(currentStep);
+  });
 
-function prevStep() {
-  document.getElementById("step" + currentStep).classList.add("hidden");
-  currentStep--;
-  document.getElementById("step" + currentStep).classList.remove("hidden");
-}
+  backBtn.addEventListener("click", function() {
+    currentStep = 1;
+    showStep(currentStep);
+  });
 
-document.getElementById("staffForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  if (submitted) return;
-  submitted = true;
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+    if(submitted) return;
+    submitted = true;
 
-  const btn = document.querySelector(".submit-btn");
-  btn.innerText = "Sending...";
-  btn.disabled = true;
+    submitBtn.innerText = "Sending...";
+    submitBtn.disabled = true;
 
-  fetch("https://script.google.com/macros/s/AKfycbwzb9qnnFDZCrjHpaH6uhFj7rRMuDQpDSINT7_-f3VJMMAeoJjx_L-g0DYpPUnM_2xk/exec", { 
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      ign: document.getElementById("ign").value,
-      discord: document.getElementById("discord").value,
-      rank: document.getElementById("rank").value
+    fetch("https://script.google.com/macros/s/AKfycbwzb9qnnFDZCrjHpaH6uhFj7rRMuDQpDSINT7_-f3VJMMAeoJjx_L-g0DYpPUnM_2xk/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ign: document.getElementById("ign").value,
+        discord: document.getElementById("discord").value,
+        rank: document.getElementById("rank").value
+      })
     })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.status === "success") {
-      alert("Staff info submitted!");
-      location.reload();
-    } else {
-      throw new Error(data.message || "Unknown error");
-    }
-  })
-  .catch(err => {
-    alert("Error submitting form: " + err.message);
-    btn.innerText = "Submit 🚀";
-    btn.disabled = false;
-    submitted = false;
-    console.error(err);
+    .then(res => res.json())
+    .then(data => {
+      if(data.status === "success") {
+        alert("Staff info submitted!");
+        location.reload();
+      } else {
+        throw new Error(data.message || "Unknown error");
+      }
+    })
+    .catch(err => {
+      alert("Error submitting form: " + err.message);
+      submitBtn.innerText = "Submit 🚀";
+      submitBtn.disabled = false;
+      submitted = false;
+      console.error(err);
+    });
   });
 });
 </script>
