@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
     submitBtn.innerText = "Sending...";
     submitBtn.disabled = true;
 
-    fetch(WEB_APP_URL, {
+    fetch("https://script.google.com/macros/s/AKfycbwHTV1D4LUMgB-poqYYednKBB_Yq34MduD_bnrRzF4usWJnDL7gj0GEaVjFe7DfFfN0/exec", {
       method: "POST",
       mode: "cors",
       headers: { "Content-Type": "application/json" },
