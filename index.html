@@ -98,6 +98,8 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
+  const WEB_APP_URL = "YOUR_WEB_APP_URL_HERE"; // Replace with your Apps Script Web App URL
+
   let currentStep = 1;
   let submitted = false;
 
@@ -114,7 +116,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   nextBtn.addEventListener("click", function() {
-    // Validate step 1 inputs
     const ign = document.getElementById("ign");
     const discord = document.getElementById("discord");
     if(!ign.value.trim() || !discord.value.trim()) {
@@ -138,8 +139,9 @@ document.addEventListener("DOMContentLoaded", function() {
     submitBtn.innerText = "Sending...";
     submitBtn.disabled = true;
 
-    fetch("https://script.google.com/macros/s/AKfycbyHQ45Fpg2p10Du1cYXE75JxWBVZOxGoH58hbBzAUgIwTmiSw4g9mj_Btwyp12EsDGX/exec", {
+    fetch(https://script.google.com/macros/s/AKfycbyHQ45Fpg2p10Du1cYXE75JxWBVZOxGoH58hbBzAUgIwTmiSw4g9mj_Btwyp12EsDGX/exec, {
       method: "POST",
+      mode: "cors",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         ign: document.getElementById("ign").value,
