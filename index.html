@@ -100,37 +100,36 @@
 document.addEventListener("DOMContentLoaded", function() {
   const WEB_APP_URL = "YOUR_WEB_APP_URL_HERE"; // <-- Replace with your Apps Script Web App URL
 
-  let currentStep = 1;
   let submitted = false;
 
   const step1 = document.getElementById("step1");
   const step2 = document.getElementById("step2");
-  const nextBtn = document.querySelector(".next-btn");
-  const backBtn = document.querySelector(".back-btn");
-  const submitBtn = document.querySelector(".submit-btn");
+  const nextBtn = step1.querySelector(".next-btn");
+  const backBtn = step2.querySelector(".back-btn");
+  const submitBtn = step2.querySelector(".submit-btn");
   const form = document.getElementById("staffForm");
 
   function showStep(stepNum) {
-    step1.classList.toggle("hidden", stepNum !== 1);
-    step2.classList.toggle("hidden", stepNum !== 2);
+    if(stepNum === 1) { step1.classList.remove("hidden"); step2.classList.add("hidden"); }
+    if(stepNum === 2) { step1.classList.add("hidden"); step2.classList.remove("hidden"); }
   }
 
   // NEXT button
-  nextBtn.addEventListener("click", function() {
-    const ign = document.getElementById("ign");
-    const discord = document.getElementById("discord");
-    if(!ign.value.trim() || !discord.value.trim()) {
+  nextBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    const ign = document.getElementById("ign").value.trim();
+    const discord = document.getElementById("discord").value.trim();
+    if(!ign || !discord) {
       alert("Please fill all fields!");
       return;
     }
-    currentStep = 2;
-    showStep(currentStep);
+    showStep(2);
   });
 
   // BACK button
-  backBtn.addEventListener("click", function() {
-    currentStep = 1;
-    showStep(currentStep);
+  backBtn.addEventListener("click", function(e) {
+    e.preventDefault();
+    showStep(1);
   });
 
   // SUBMIT form
@@ -142,7 +141,7 @@ document.addEventListener("DOMContentLoaded", function() {
     submitBtn.innerText = "Sending...";
     submitBtn.disabled = true;
 
-    fetch(https://script.google.com/macros/s/AKfycbwHTV1D4LUMgB-poqYYednKBB_Yq34MduD_bnrRzF4usWJnDL7gj0GEaVjFe7DfFfN0/exec, {
+    fetch(WEB_APP_URL, {
       method: "POST",
       mode: "cors",
       headers: { "Content-Type": "application/json" },
