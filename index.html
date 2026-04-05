@@ -145,31 +145,16 @@ document.getElementById("staffForm").addEventListener("submit", function(e) {
   btn.innerText = "Sending...";
   btn.disabled = true;
 
-fetch("https://script.google.com/macros/s/AKfycbzpFLDD0MntfM9F5sRiN1eddcZKviw1JYOhpdGZn1wvRhIk1MwVHw3W3hpLcPoxWF8t/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    ign: document.getElementById("ign").value,
-    discord: document.getElementById("discord").value,
-    rank: document.getElementById("rank").value
-  })
-})
-.then(res => res.text())
-.then(() => {
-  alert("Staff info submitted!");
-  location.reload();
-})
-.catch(err => {
-  alert("Error submitting form");
-  btn.innerText = "Submit 🚀";
-  btn.disabled = false;
-  submitted = false;
-  console.error(err);
-});
-  },
-  body: JSON.stringify({
+  fetch("https://script.google.com/macros/s/AKfycbzpFLDD0MntfM9F5sRiN1eddcZKviw1JYOhpdGZn1wvRhIk1MwVHw3W3hpLcPoxWF8t/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      ign: document.getElementById("ign").value,
+      discord: document.getElementById("discord").value,
+      rank: document.getElementById("rank").value
+    })
   })
   .then(res => res.text())
   .then(() => {
