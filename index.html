@@ -151,6 +151,25 @@ fetch("https://script.google.com/macros/s/AKfycbzpFLDD0MntfM9F5sRiN1eddcZKviw1JY
     "Content-Type": "application/json"
   },
   body: JSON.stringify({
+    ign: document.getElementById("ign").value,
+    discord: document.getElementById("discord").value,
+    rank: document.getElementById("rank").value
+  })
+})
+.then(res => res.text())
+.then(() => {
+  alert("Staff info submitted!");
+  location.reload();
+})
+.catch(err => {
+  alert("Error submitting form");
+  btn.innerText = "Submit 🚀";
+  btn.disabled = false;
+  submitted = false;
+  console.error(err);
+});
+  },
+  body: JSON.stringify({
   })
   .then(res => res.text())
   .then(() => {
