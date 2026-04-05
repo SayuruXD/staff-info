@@ -117,14 +117,12 @@ let submitted = false;
 function nextStep() {
   const step = document.getElementById("step" + currentStep);
   const inputs = step.querySelectorAll("input, select");
-
   for (let inp of inputs) {
     if (inp.required && inp.value.trim() === "") {
       alert("Please fill this field!");
       return;
     }
   }
-
   step.classList.add("hidden");
   currentStep++;
   document.getElementById("step" + currentStep).classList.remove("hidden");
@@ -145,10 +143,11 @@ document.getElementById("staffForm").addEventListener("submit", function(e) {
   btn.innerText = "Sending...";
   btn.disabled = true;
 
-  fetch("https://script.google.com/macros/s/AKfycbx5lnaZvXWkVVQ0bWVKU38dGPg-F87Gype1wYr905zouOVPqKIJCKkWrIk3MT0cR0jH/exec", {
+  fetch("YOUR_EXEC_URL_HERE", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Accept": "application/json"
     },
     body: JSON.stringify({
       ign: document.getElementById("ign").value,
@@ -156,13 +155,20 @@ document.getElementById("staffForm").addEventListener("submit", function(e) {
       rank: document.getElementById("rank").value
     })
   })
-  .then(res => res.text())
-  .then(() => {
-    alert("Staff info submitted!");
-    location.reload();
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "success") {
+      alert("Staff info submitted!");
+      location.reload();
+    } else {
+      alert("Error: " + (data.message || "Unknown error"));
+      btn.innerText = "Submit 🚀";
+      btn.disabled = false;
+      submitted = false;
+    }
   })
   .catch(err => {
-    alert("Error submitting form");
+    alert("Network or script error: " + err);
     btn.innerText = "Submit 🚀";
     btn.disabled = false;
     submitted = false;
